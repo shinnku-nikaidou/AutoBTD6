@@ -1,10 +1,6 @@
-import datetime
-import keyboard
 import cv2
 import pyautogui
 import time
-import signal
-import sys
 import numpy as np
 import re
 import json
@@ -14,8 +10,6 @@ import os
 from os.path import exists
 import math
 import copy
-import random
-from functools import reduce
 
 ahk = AHK()
 
@@ -49,8 +43,10 @@ class Screen(Enum):
     OVERWRITE_SAVE = 12
     LEVELUP = 13
     APOPALYPSE_HINT = 14
-    INSTA_GRANTED = 15  # insta monkey reward screen (either from round 100 or collection chest)
-    INSTA_CLAIMED = 16 # insta monkey claimed screen (after INSTA_GRANTED when pressing ESC instead of clicking), can't be left using ESC
+    INSTA_GRANTED = (
+        15  # insta monkey reward screen (either from round 100 or collection chest)
+    )
+    INSTA_CLAIMED = 16  # insta monkey claimed screen (after INSTA_GRANTED when pressing ESC instead of clicking), can't be left using ESC
     COLLECTION_CLAIM_CHEST = 17
     BTD6_UNFOCUSED = 18
 
@@ -271,11 +267,11 @@ def parseBTD6InstructionsFile(
     sandboxMode = False
 
     mapname = fileConfig["map"]
-    if not mapname in maps:
+    if mapname not in maps:
         print("unknown map: " + str(mapname))
         return None
     gamemode = gamemode if gamemode else fileConfig["gamemode"]
-    if not gamemode in gamemodes and not gamemode in sandboxGamemodes:
+    if gamemode not in gamemodes and gamemode not in sandboxGamemodes:
         print("unknown gamemode: " + str(gamemode))
         return None
     if gamemode in sandboxGamemodes:
@@ -611,7 +607,6 @@ def parseBTD6InstructionsFile(
             }
             newSteps.append(newStep)
 
-
         if len(newSteps):
             newMapConfig["steps"] += newSteps
 
@@ -656,7 +651,7 @@ def getMonkeyUpgradeRequirements(monkeys):
     for monkey in monkeys:
         if monkeys[monkey]["type"] == "hero":
             continue
-        if not monkeys[monkey]["type"] in monkeyUpgradeRequirements:
+        if monkeys[monkey]["type"] not in monkeyUpgradeRequirements:
             monkeyUpgradeRequirements[monkeys[monkey]["type"]] = np.array(
                 monkeys[monkey]["upgrades"]
             )
@@ -676,8 +671,8 @@ def monkeyUpgradesToString(upgrades):
 
 def getHadDefeats(playthrough, playthroughLog):
     if (
-        not playthrough["filename"] in playthroughLog
-        or not playthrough["gamemode"] in playthroughLog[playthrough["filename"]]
+        playthrough["filename"] not in playthroughLog
+        or playthrough["gamemode"] not in playthroughLog[playthrough["filename"]]
     ):
         return False
     return (
@@ -686,7 +681,7 @@ def getHadDefeats(playthrough, playthroughLog):
 
 
 def getAveragePlaythroughTime(playthrough):
-    if not playthrough["filename"] in playthroughStats:
+    if playthrough["filename"] not in playthroughStats:
         return -1
 
     times = []
@@ -716,7 +711,7 @@ def getHighestValuePlaythrough(
     highestValueNoDefeatsPlaythroughValue = 0
     highestValueNoDefeatsPlaythroughTime = 0
 
-    if not mapname in allAvailablePlaythroughs:
+    if mapname not in allAvailablePlaythroughs:
         return None
 
     for gamemode in allAvailablePlaythroughs[mapname]:
@@ -792,14 +787,14 @@ def updatePlaythroughValidationStatus(
 ):
     global playthroughStats
 
-    if not playthroughFile in playthroughStats:
+    if playthroughFile not in playthroughStats:
         playthroughStats[playthroughFile] = {}
-    if not resolution in playthroughStats[playthroughFile]:
+    if resolution not in playthroughStats[playthroughFile]:
         playthroughStats[playthroughFile][resolution] = {"validation_result": False}
 
-    playthroughStats[playthroughFile][resolution][
-        "validation_result"
-    ] = validationStatus
+    playthroughStats[playthroughFile][resolution]["validation_result"] = (
+        validationStatus
+    )
 
     fp = open("playthrough_stats.json", "w")
     fp.write(json.dumps(playthroughStats, indent=4))
@@ -811,13 +806,12 @@ def updateStatsFile(
 ):
     global playthroughStats
 
-    if not playthroughFile in playthroughStats:
+    if playthroughFile not in playthroughStats:
         playthroughStats[playthroughFile] = {}
-    if not resolution in playthroughStats[playthroughFile]:
+    if resolution not in playthroughStats[playthroughFile]:
         playthroughStats[playthroughFile][resolution] = {"validation_result": False}
     if (
-        not thisPlaythroughStats["gamemode"]
-        in playthroughStats[playthroughFile][resolution]
+        thisPlaythroughStats["gamemode"] not in playthroughStats[playthroughFile][resolution]
     ):
         playthroughStats[playthroughFile][resolution][
             thisPlaythroughStats["gamemode"]
@@ -956,13 +950,13 @@ def checkBTD6InstructionsFileCompatability(filename, gamemode):
 # doesn't yet consider unlocked_monkey_upgrades
 def canUserUsePlaythrough(playthrough):
     if (
-        not playthrough["fileConfig"]["map"] in userConfig["unlocked_maps"]
+        playthrough["fileConfig"]["map"] not in userConfig["unlocked_maps"]
         or not userConfig["unlocked_maps"][playthrough["fileConfig"]["map"]]
     ):
         return False
     mapConfig = parseBTD6InstructionsFile(playthrough["filename"])
     if "hero" in mapConfig and (
-        not mapConfig["hero"] in userConfig["heros"]
+        mapConfig["hero"] not in userConfig["heros"]
         or not userConfig["heros"][mapConfig["hero"]]
     ):
         return False
@@ -980,9 +974,9 @@ def getMedalStatus(mapname, gamemode):
 def updateMedalStatus(mapname, gamemode, status=True):
     if getMedalStatus(mapname, gamemode) == status:
         return
-    if not mapname in userConfig["medals"]:
+    if mapname not in userConfig["medals"]:
         userConfig["medals"][mapname] = {}
-    if not gamemode in userConfig["medals"][mapname]:
+    if gamemode not in userConfig["medals"][mapname]:
         userConfig["medals"][mapname][gamemode] = False
     userConfig["medals"][mapname][gamemode] = status
     fp = open("userconfig.json", "w")
@@ -991,7 +985,7 @@ def updateMedalStatus(mapname, gamemode, status=True):
 
 
 def canUserAccessGamemode(mapname, gamemode):
-    if not mapname in userConfig["medals"]:
+    if mapname not in userConfig["medals"]:
         return False
     if gamemode in ["easy", "medium", "hard"]:
         return True
@@ -1024,7 +1018,7 @@ def canUserAccessGamemode(mapname, gamemode):
 
 
 def getAvailableSandbox(mapname, restricted_to=None):
-    for gamemode in restricted_to if not restricted_to is None else sandboxGamemodes:
+    for gamemode in restricted_to if restricted_to is not None else sandboxGamemodes:
         if canUserAccessGamemode(mapname, gamemode):
             return gamemode
     return None
@@ -1043,7 +1037,7 @@ def getAllAvailablePlaythroughs(additionalDirs=[], considerUserConfig=False):
             {"filename": filename, "fileConfig": fileConfig}
         ):
             continue
-        if not fileConfig["map"] in playthroughs:
+        if fileConfig["map"] not in playthroughs:
             playthroughs[fileConfig["map"]] = {}
         compatibleGamemodes = listBTD6InstructionsFileCompatability(filename)
         for gamemode in compatibleGamemodes:
@@ -1051,7 +1045,7 @@ def getAllAvailablePlaythroughs(additionalDirs=[], considerUserConfig=False):
                 fileConfig["map"], gamemode
             ):
                 continue
-            if not gamemode in playthroughs[fileConfig["map"]]:
+            if gamemode not in playthroughs[fileConfig["map"]]:
                 playthroughs[fileConfig["map"]][gamemode] = []
             playthroughs[fileConfig["map"]][gamemode].append(
                 {
@@ -1092,7 +1086,7 @@ def filterAllAvailablePlaythroughs(
                     continue
                 if heroWhitelist:
                     mapConfig = parseBTD6InstructionsFile(playthrough["filename"])
-                    if "hero" in mapConfig and not mapConfig["hero"] in heroWhitelist:
+                    if "hero" in mapConfig and mapConfig["hero"] not in heroWhitelist:
                         continue
                 if requiredFlags and not all(
                     [x in playthrough["fileConfig"] for x in requiredFlags]
@@ -1107,11 +1101,9 @@ def filterAllAvailablePlaythroughs(
                             handlePlaythroughValidation
                             == ValidatedPlaythroughs.EXCLUDE_NON_VALIDATED
                             and (
-                                not playthrough["filename"] in playthroughStats
-                                or not resolution
-                                in playthroughStats[playthrough["filename"]]
-                                or not "validation_result"
-                                in playthroughStats[playthrough["filename"]][resolution]
+                                playthrough["filename"] not in playthroughStats
+                                or resolution not in playthroughStats[playthrough["filename"]]
+                                or "validation_result" not in playthroughStats[playthrough["filename"]][resolution]
                                 or playthroughStats[playthrough["filename"]][
                                     resolution
                                 ]["validation_result"]
@@ -1136,9 +1128,9 @@ def filterAllAvailablePlaythroughs(
                     )
                 ):
                     continue
-                if not mapname in filteredPlaythroughs:
+                if mapname not in filteredPlaythroughs:
                     filteredPlaythroughs[mapname] = {}
-                if not gamemode in filteredPlaythroughs[mapname]:
+                if gamemode not in filteredPlaythroughs[mapname]:
                     filteredPlaythroughs[mapname][gamemode] = []
                 filteredPlaythroughs[mapname][gamemode].append(playthrough)
 
@@ -1202,7 +1194,7 @@ def getPlaythroughXP(gamemode, mapcategory):
 
 
 def getPlaythroughMonkeyMoney(gamemode, mapcategory):
-    if not gamemode in gamemodes:
+    if gamemode not in gamemodes:
         return 0
 
     replayMonkeyMoney = {
@@ -1217,7 +1209,7 @@ def getPlaythroughMonkeyMoney(gamemode, mapcategory):
         },
     }
 
-    if not mapcategory in replayMonkeyMoney["easy"]:
+    if mapcategory not in replayMonkeyMoney["easy"]:
         return 0
 
     return replayMonkeyMoney[gamemodes[gamemode]["cash_group"]][mapcategory]
@@ -1271,7 +1263,7 @@ def findImageInImage(img, subImg):
 
 
 def findMapForPxPos(category, page, pxpos):
-    if not category in mapsByPos or not page in mapsByPos[category]:
+    if category not in mapsByPos or page not in mapsByPos[category]:
         return None
     bestFind = None
     bestFindDist = 100000
@@ -1326,12 +1318,14 @@ def getMonkeyKnowledgeStatus():
 def keyToAHK(x):
     return "{sc" + hex(x).replace("0x", "") + "}" if type(x) == type(int()) else x
 
+
 def sendKey(key):
-    ahk.send(keyToAHK(key), key_delay=15, key_press_duration=30, send_mode='Event')
+    ahk.send(keyToAHK(key), key_delay=15, key_press_duration=30, send_mode="Event")
+
 
 def mapnameToKeyname(mapname):
     return (
-        "".join([(x if not x in ["'", "#"] else "") for x in mapname])
+        "".join([(x if x not in ["'", "#"] else "") for x in mapname])
         .replace(" ", "_")
         .lower()
     )
@@ -1357,7 +1351,7 @@ def mapsByCategoryToMaplist(mapsByCategory, maps):
 
 
 def upgradeRequiresConfirmation(monkey, path):
-    if not "upgrade_confirmation" in towers["monkeys"][monkey["type"]]:
+    if "upgrade_confirmation" not in towers["monkeys"][monkey["type"]]:
         return False
     if monkey["upgrades"][path] - 1 == -1:
         return False
@@ -1371,12 +1365,13 @@ def upgradeRequiresConfirmation(monkey, path):
 def isBTD6Window(name):
     return name in ["BloonsTD6", "BloonsTD6-Epic"]
 
+
 def getIngameOcrSegments(mapConfig):
     segmentCoordinates = copy.deepcopy(imageAreas["ocr_segments"])
-    
+
     if mapConfig["gamemode"] in ["impoppable", "chimps"]:
         segmentCoordinates["round"] = segmentCoordinates["round_ge100_rounds"]
-    
+
     return {
         "lives": segmentCoordinates["lives"],
         "mana_lives": segmentCoordinates["mana_lives"],
@@ -1384,7 +1379,8 @@ def getIngameOcrSegments(mapConfig):
         "round": segmentCoordinates["round"],
     }
 
-def recognizeScreen(img, comparisonImages, ignoreFocus = False):
+
+def recognizeScreen(img, comparisonImages, ignoreFocus=False):
     screen = Screen.UNKNOWN
     activeWindow = ahk.get_active_window()
     if not ignoreFocus and (not activeWindow or not isBTD6Window(activeWindow.title)):
@@ -1392,24 +1388,92 @@ def recognizeScreen(img, comparisonImages, ignoreFocus = False):
     else:
         bestMatchDiff = None
         for screenCfg in [
-            (Screen.STARTMENU, comparisonImages["screens"]["startmenu"], imageAreas["compare"]["screens"]["startmenu"]),
-            (Screen.MAP_SELECTION, comparisonImages["screens"]["map_selection"], imageAreas["compare"]["screens"]["map_selection"]),
-            (Screen.DIFFICULTY_SELECTION, comparisonImages["screens"]["difficulty_selection"], imageAreas["compare"]["screens"]["difficulty_selection"]),
-            (Screen.GAMEMODE_SELECTION, comparisonImages["screens"]["gamemode_selection"], imageAreas["compare"]["screens"]["gamemode_selection"]),
-            (Screen.HERO_SELECTION, comparisonImages["screens"]["hero_selection"], imageAreas["compare"]["screens"]["hero_selection"]),
-            (Screen.INGAME, comparisonImages["screens"]["ingame"], imageAreas["compare"]["screens"]["ingame"]),
-            (Screen.INGAME_PAUSED, comparisonImages["screens"]["ingame_paused"], imageAreas["compare"]["screens"]["ingame_paused"]),
-            (Screen.VICTORY_SUMMARY, comparisonImages["screens"]["victory_summary"], imageAreas["compare"]["screens"]["victory_summary"]),
-            (Screen.VICTORY, comparisonImages["screens"]["victory"], imageAreas["compare"]["screens"]["victory"]),
-            (Screen.DEFEAT, comparisonImages["screens"]["defeat"], imageAreas["compare"]["screens"]["defeat"]),
-            (Screen.OVERWRITE_SAVE, comparisonImages["screens"]["overwrite_save"], imageAreas["compare"]["screens"]["overwrite_save"]),
-            (Screen.LEVELUP, comparisonImages["screens"]["levelup"], imageAreas["compare"]["screens"]["levelup"]),
-            (Screen.APOPALYPSE_HINT, comparisonImages["screens"]["apopalypse_hint"], imageAreas["compare"]["screens"]["apopalypse_hint"]),
-            (Screen.INSTA_GRANTED, comparisonImages["screens"]["insta_granted"], imageAreas["compare"]["screens"]["insta_granted"]),
-            (Screen.INSTA_CLAIMED, comparisonImages["screens"]["insta_claimed"], imageAreas["compare"]["screens"]["insta_claimed"]),
-            (Screen.COLLECTION_CLAIM_CHEST, comparisonImages["screens"]["collection_claim_chest"], imageAreas["compare"]["screens"]["collection_claim_chest"]),
+            (
+                Screen.STARTMENU,
+                comparisonImages["screens"]["startmenu"],
+                imageAreas["compare"]["screens"]["startmenu"],
+            ),
+            (
+                Screen.MAP_SELECTION,
+                comparisonImages["screens"]["map_selection"],
+                imageAreas["compare"]["screens"]["map_selection"],
+            ),
+            (
+                Screen.DIFFICULTY_SELECTION,
+                comparisonImages["screens"]["difficulty_selection"],
+                imageAreas["compare"]["screens"]["difficulty_selection"],
+            ),
+            (
+                Screen.GAMEMODE_SELECTION,
+                comparisonImages["screens"]["gamemode_selection"],
+                imageAreas["compare"]["screens"]["gamemode_selection"],
+            ),
+            (
+                Screen.HERO_SELECTION,
+                comparisonImages["screens"]["hero_selection"],
+                imageAreas["compare"]["screens"]["hero_selection"],
+            ),
+            (
+                Screen.INGAME,
+                comparisonImages["screens"]["ingame"],
+                imageAreas["compare"]["screens"]["ingame"],
+            ),
+            (
+                Screen.INGAME_PAUSED,
+                comparisonImages["screens"]["ingame_paused"],
+                imageAreas["compare"]["screens"]["ingame_paused"],
+            ),
+            (
+                Screen.VICTORY_SUMMARY,
+                comparisonImages["screens"]["victory_summary"],
+                imageAreas["compare"]["screens"]["victory_summary"],
+            ),
+            (
+                Screen.VICTORY,
+                comparisonImages["screens"]["victory"],
+                imageAreas["compare"]["screens"]["victory"],
+            ),
+            (
+                Screen.DEFEAT,
+                comparisonImages["screens"]["defeat"],
+                imageAreas["compare"]["screens"]["defeat"],
+            ),
+            (
+                Screen.OVERWRITE_SAVE,
+                comparisonImages["screens"]["overwrite_save"],
+                imageAreas["compare"]["screens"]["overwrite_save"],
+            ),
+            (
+                Screen.LEVELUP,
+                comparisonImages["screens"]["levelup"],
+                imageAreas["compare"]["screens"]["levelup"],
+            ),
+            (
+                Screen.APOPALYPSE_HINT,
+                comparisonImages["screens"]["apopalypse_hint"],
+                imageAreas["compare"]["screens"]["apopalypse_hint"],
+            ),
+            (
+                Screen.INSTA_GRANTED,
+                comparisonImages["screens"]["insta_granted"],
+                imageAreas["compare"]["screens"]["insta_granted"],
+            ),
+            (
+                Screen.INSTA_CLAIMED,
+                comparisonImages["screens"]["insta_claimed"],
+                imageAreas["compare"]["screens"]["insta_claimed"],
+            ),
+            (
+                Screen.COLLECTION_CLAIM_CHEST,
+                comparisonImages["screens"]["collection_claim_chest"],
+                imageAreas["compare"]["screens"]["collection_claim_chest"],
+            ),
         ]:
-            diff = cv2.matchTemplate(cutImage(img, screenCfg[2]), cutImage(screenCfg[1], screenCfg[2]), cv2.TM_SQDIFF_NORMED)[0][0]
+            diff = cv2.matchTemplate(
+                cutImage(img, screenCfg[2]),
+                cutImage(screenCfg[1], screenCfg[2]),
+                cv2.TM_SQDIFF_NORMED,
+            )[0][0]
             if diff < 0.05 and (bestMatchDiff is None or diff < bestMatchDiff):
                 bestMatchDiff = diff
                 screen = screenCfg[0]
@@ -1459,15 +1523,15 @@ if exists("userconfig.json"):
 
 mapsByCategory = {}
 for mapname in maps:
-    if not maps[mapname]["category"] in mapsByCategory:
+    if maps[mapname]["category"] not in mapsByCategory:
         mapsByCategory[maps[mapname]["category"]] = []
     mapsByCategory[maps[mapname]["category"]].append(mapname)
 
 mapsByPos = {}
 for mapname in maps:
-    if not maps[mapname]["category"] in mapsByPos:
+    if maps[mapname]["category"] not in mapsByPos:
         mapsByPos[maps[mapname]["category"]] = {}
-    if not maps[mapname]["page"] in mapsByPos[maps[mapname]["category"]]:
+    if maps[mapname]["page"] not in mapsByPos[maps[mapname]["category"]]:
         mapsByPos[maps[mapname]["category"]][maps[mapname]["page"]] = {}
     mapsByPos[maps[mapname]["category"]][maps[mapname]["page"]][
         maps[mapname]["pos"]

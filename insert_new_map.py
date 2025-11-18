@@ -1,6 +1,6 @@
 from helper import *
 
-if len(sys.argv) < 4 or not sys.argv[2] in ["before", "after"]:
+if len(sys.argv) < 4 or sys.argv[2] not in ["before", "after"]:
     print(
         f'Usage: py {sys.argv[0]} "<name of the new map>" <before|after> "<name of adjacent map>"'
     )
@@ -12,11 +12,11 @@ newMap = sys.argv[1]
 newMapKey = mapnameToKeyname(newMap)
 insertPosOffset = 0 if sys.argv[2] == "before" else 1
 
-if not nextMapKey in maps:
+if nextMapKey not in maps:
     print(f"Unknown map: {nextMap}")
     exit()
 if newMapKey in maps:
-    print(f"New map already inserted!")
+    print("New map already inserted!")
     exit()
 
 mapsByCategory[maps[nextMapKey]["category"]].insert(
@@ -49,16 +49,20 @@ print('"maps.json" successfully updated')
 
 newUserconfig = copy.deepcopy(userConfig)
 
-if not newMapKey in newUserconfig['unlocked_maps']:
-    pos = list(newUserconfig['unlocked_maps'].keys()).index(nextMapKey)
-    items = list(newUserconfig['unlocked_maps'].items())
+if newMapKey not in newUserconfig["unlocked_maps"]:
+    pos = list(newUserconfig["unlocked_maps"].keys()).index(nextMapKey)
+    items = list(newUserconfig["unlocked_maps"].items())
     items.insert(pos, (newMapKey, True))
-    newUserconfig['unlocked_maps'] = dict(items)
+    newUserconfig["unlocked_maps"] = dict(items)
 
-if not newMapKey in newUserconfig['medals']:
-    pos = list(newUserconfig['medals'].keys()).index(nextMapKey)
-    items = list(newUserconfig['medals'].items())
-    items.insert(pos, (newMapKey, {
+if newMapKey not in newUserconfig["medals"]:
+    pos = list(newUserconfig["medals"].keys()).index(nextMapKey)
+    items = list(newUserconfig["medals"].items())
+    items.insert(
+        pos,
+        (
+            newMapKey,
+            {
                 "easy": True,
                 "primary_only": True,
                 "deflation": True,
@@ -72,9 +76,11 @@ if not newMapKey in newUserconfig['medals']:
                 "half_cash": True,
                 "alternate_bloons_rounds": True,
                 "impoppable": True,
-                "chimps": True
-    }))
-    newUserconfig['medals'] = dict(items)
+                "chimps": True,
+            },
+        ),
+    )
+    newUserconfig["medals"] = dict(items)
 
 fp = open("userconfig.json", "w")
 fp.write(json.dumps(newUserconfig, indent=4))

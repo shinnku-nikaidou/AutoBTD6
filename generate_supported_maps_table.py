@@ -30,7 +30,7 @@ playthroughs = getAllAvailablePlaythroughs()
 mapsByCategory = {}
 
 for mapname in maps:
-    if not maps[mapname]["category"] in mapsByCategory:
+    if maps[mapname]["category"] not in mapsByCategory:
         mapsByCategory[maps[mapname]["category"]] = []
     mapsByCategory[maps[mapname]["category"]].append((mapname, maps[mapname]))
 
@@ -205,7 +205,7 @@ fp.close()
 
 output = re.sub(
     '<div id="supported_maps">.*?<\\/div>',
-    '<div id="supported_maps">\n' + output + '</div>',
+    '<div id="supported_maps">\n' + output + "</div>",
     oldREADME,
     1,
     re.DOTALL,

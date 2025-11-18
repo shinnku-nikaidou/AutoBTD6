@@ -28,6 +28,6 @@ images = [
     for segment in segmentCoordinates
 ]
 
-print(f"detected value: {custom_ocr(images[2], resolution = (w, h))}")
+print(f"detected value: {custom_ocr(images[2], resolution=(w, h))}")
 
 cv2.imwrite(str(argv[1]).replace(".png", "_area.png"), images[2])

@@ -8,7 +8,9 @@ output = oldREADME
 
 output = re.sub(
     '<div id="map_parameter">.*?<\\/div>',
-    '<div id="map_parameter">\n\n' + '\n'.join(map(lambda x: f'- `{x}`', maps.keys())) + '\n</div>',
+    '<div id="map_parameter">\n\n'
+    + "\n".join(map(lambda x: f"- `{x}`", maps.keys()))
+    + "\n</div>",
     output,
     1,
     re.DOTALL,
@@ -30,4 +32,3 @@ else:
     fp.write(output)
     fp.close()
 
-import generate_supported_maps_table

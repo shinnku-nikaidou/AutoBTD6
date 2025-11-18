@@ -84,7 +84,7 @@ def custom_ocr(img, resolution=pyautogui.size()):
     for prediction in predictions:
         value = np.argmax(prediction)
         if value == 10:
-            number += '/'
+            number += "/"
         else:
             number += str(value)
 

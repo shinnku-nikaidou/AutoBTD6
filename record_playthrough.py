@@ -108,14 +108,17 @@ def onRecordingEvent(e):
         e["round"] = input("wait for round: ")
         try:
             e["round"] = int(e["round"])
-            if e["round"] > 0 and not any((x["action"] == "await_round" and x["round"] >= e["round"]) for x in config["steps"]):
+            if e["round"] > 0 and not any(
+                (x["action"] == "await_round" and x["round"] >= e["round"])
+                for x in config["steps"]
+            ):
                 config["steps"].append({"action": "await_round", "round": e["round"]})
                 print("await round " + str(e["round"]))
                 return
         except ValueError:
             pass
         print("invalid round! aborting entry!")
-        
+
 
 while True:
     print("mapname > ")
@@ -175,11 +178,13 @@ signal.signal(signal.SIGINT, signalHandler)
 # filtering on all keypresses doesn't work as the provided key name is localized
 # keyboard.hook(onKeyPress)
 
+
 def createKeybind(key, data):
     keyboard.on_press_key(
         key,
         lambda e: onRecordingEvent(data),
     )
+
 
 for monkey, key in keybinds["monkeys"].items():
     createKeybind(key, {"action": "place", "type": monkey})
@@ -193,7 +198,9 @@ createKeybind(keybinds["recording"]["remove_obstacle"], {"action": "remove_obsta
 createKeybind(keybinds["recording"]["retarget"], {"action": "retarget"})
 createKeybind(keybinds["recording"]["sell"], {"action": "sell"})
 createKeybind(keybinds["recording"]["monkey_special"], {"action": "monkey_special"})
-createKeybind(keybinds["recording"]["await_round"], {"action": "await_round", "round": "0"})
+createKeybind(
+    keybinds["recording"]["await_round"], {"action": "await_round", "round": "0"}
+)
 
 while True:
     time.sleep(60)
