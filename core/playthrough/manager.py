@@ -67,8 +67,9 @@ def filterAllAvailablePlaythroughs(
     """Filter playthroughs based on various criteria."""
     if resolution is None:
         import pyautogui
+
         resolution = getResolutionString(pyautogui.size())
-    
+
     filteredPlaythroughs = {}
 
     for mapname in playthroughs:
@@ -145,7 +146,7 @@ def getHighestValuePlaythrough(
 ):
     """Find the highest value playthrough for a map."""
     from core.playthrough.stats import getAveragePlaythroughTime, getHadDefeats
-    
+
     highestValuePlaythrough = None
     highestValuePlaythroughValue = 0
     highestValuePlaythroughTime = -1
@@ -227,7 +228,7 @@ def getHighestValuePlaythrough(
 def listBTD6InstructionsFileCompatability(filename):
     """List all gamemodes compatible with a playthrough file."""
     from core.game.towers import checkForSingleMonkeyGroup
-    
+
     fileConfig = parseBTD6InstructionFileName(filename)
     mapConfig = parseBTD6InstructionsFile(filename)
     singleMonkeyGroup = checkForSingleMonkeyGroup(mapConfig["monkeys"])

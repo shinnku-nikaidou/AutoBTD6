@@ -1,4 +1,5 @@
 """Image processing utilities"""
+
 import cv2
 import numpy as np
 

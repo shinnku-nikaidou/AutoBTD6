@@ -1,4 +1,5 @@
 """Configuration manager - processes and provides access to configs"""
+
 from core.config.loader import maps, monkeyKnowledgeEnabled, userConfig
 
 # Derived configuration data
@@ -10,13 +11,13 @@ categoryPages = {}
 def generate_derived_configs():
     """Generate derived configuration data structures"""
     global mapsByCategory, mapsByPos, categoryPages
-    
+
     # Generate mapsByCategory
     for mapname in maps:
         if maps[mapname]["category"] not in mapsByCategory:
             mapsByCategory[maps[mapname]["category"]] = []
         mapsByCategory[maps[mapname]["category"]].append(mapname)
-    
+
     # Generate mapsByPos
     for mapname in maps:
         if maps[mapname]["category"] not in mapsByPos:
@@ -26,7 +27,7 @@ def generate_derived_configs():
         mapsByPos[maps[mapname]["category"]][maps[mapname]["page"]][
             maps[mapname]["pos"]
         ] = mapname
-    
+
     # Generate categoryPages
     for category in mapsByCategory:
         categoryPages[category] = (
@@ -41,6 +42,7 @@ def getMonkeyKnowledgeStatus():
 def setMonkeyKnowledgeStatus(status):
     global monkeyKnowledgeEnabled
     from core.config import loader
+
     loader.monkeyKnowledgeEnabled = status
     monkeyKnowledgeEnabled = status
 

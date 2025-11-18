@@ -14,14 +14,39 @@ import random
 import pyautogui
 
 from core.constants import Screen, State, Mode, PlaythroughResult, ValidatedPlaythroughs
-from core.config.loader import maps, gamemodes, imageAreas, playthroughStats, towers, keybinds
-from core.config.manager import setMonkeyKnowledgeStatus, getMonkeyKnowledgeStatus, mapsByCategory, categoryPages
+from core.config.loader import (
+    maps,
+    gamemodes,
+    imageAreas,
+    playthroughStats,
+    towers,
+    keybinds,
+)
+from core.config.manager import (
+    setMonkeyKnowledgeStatus,
+    getMonkeyKnowledgeStatus,
+    mapsByCategory,
+    categoryPages,
+)
 from core.automation.screen import recognizeScreen, getIngameOcrSegments, isBTD6Window
 from core.automation.image import cutImage, findImageInImage
 from core.automation.input import sendKey, ahk
-from core.playthrough.parser import parseBTD6InstructionsFile, parseBTD6InstructionFileName
-from core.playthrough.manager import getAllAvailablePlaythroughs, filterAllAvailablePlaythroughs, getHighestValuePlaythrough, allPlaythroughsToList
-from core.playthrough.stats import updateStatsFile, updatePlaythroughValidationStatus, sortPlaythroughsByXPGain, sortPlaythroughsByMonkeyMoneyGain
+from core.playthrough.parser import (
+    parseBTD6InstructionsFile,
+    parseBTD6InstructionFileName,
+)
+from core.playthrough.manager import (
+    getAllAvailablePlaythroughs,
+    filterAllAvailablePlaythroughs,
+    getHighestValuePlaythrough,
+    allPlaythroughsToList,
+)
+from core.playthrough.stats import (
+    updateStatsFile,
+    updatePlaythroughValidationStatus,
+    sortPlaythroughsByXPGain,
+    sortPlaythroughsByMonkeyMoneyGain,
+)
 from core.game.maps import findMapForPxPos
 from core.game.medals import getAvailableSandbox, updateMedalStatus
 from core.game.costs import upgradeRequiresConfirmation

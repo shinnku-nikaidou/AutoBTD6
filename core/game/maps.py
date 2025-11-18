@@ -1,4 +1,5 @@
 """Map-related utilities"""
+
 import math
 from core.config.loader import maps, imageAreas
 from core.config.manager import mapsByPos

@@ -1,4 +1,5 @@
 """Position and resolution utilities"""
+
 import re
 import pyautogui
 

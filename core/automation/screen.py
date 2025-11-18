@@ -1,4 +1,5 @@
 """Screen recognition utilities"""
+
 import cv2
 import copy
 from core.constants import Screen

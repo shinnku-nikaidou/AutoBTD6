@@ -59,9 +59,10 @@ def updatePlaythroughValidationStatus(
 ):
     """Update validation status for a playthrough."""
     global playthroughStats
-    
+
     if resolution is None:
         import pyautogui
+
         resolution = getResolutionString(pyautogui.size())
 
     if playthroughFile not in playthroughStats:
@@ -69,23 +70,22 @@ def updatePlaythroughValidationStatus(
     if resolution not in playthroughStats[playthroughFile]:
         playthroughStats[playthroughFile][resolution] = {"validation_result": False}
 
-    playthroughStats[playthroughFile][resolution][
-        "validation_result"
-    ] = validationStatus
+    playthroughStats[playthroughFile][resolution]["validation_result"] = (
+        validationStatus
+    )
 
     fp = open("playthrough_stats.json", "w")
     fp.write(json.dumps(playthroughStats, indent=4))
     fp.close()
 
 
-def updateStatsFile(
-    playthroughFile, thisPlaythroughStats, resolution=None
-):
+def updateStatsFile(playthroughFile, thisPlaythroughStats, resolution=None):
     """Update stats file with new playthrough results."""
     global playthroughStats
-    
+
     if resolution is None:
         import pyautogui
+
         resolution = getResolutionString(pyautogui.size())
 
     if playthroughFile not in playthroughStats:
@@ -135,6 +135,7 @@ def monkeyUpgradesToString(upgrades):
 
 
 # XP and Monkey Money calculation functions
+
 
 def getRoundTotalBaseXP(round):
     """Calculate total base XP for completing up to a given round."""

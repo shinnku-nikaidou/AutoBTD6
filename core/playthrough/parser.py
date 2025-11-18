@@ -48,8 +48,9 @@ def getBTD6InstructionsFileNameByConfig(
     """Generate a .btd6 filename from a playthrough config."""
     if resolution is None:
         import pyautogui
+
         resolution = getResolutionString(pyautogui.size())
-    
+
     return (
         folder
         + "/"
@@ -67,14 +68,13 @@ def getBTD6InstructionsFileNameByConfig(
     )
 
 
-def writeBTD6InstructionsFile(
-    thisConfig, folder="own_playthroughs", resolution=None
-):
+def writeBTD6InstructionsFile(thisConfig, folder="own_playthroughs", resolution=None):
     """Write a playthrough config to a .btd6 file."""
     if resolution is None:
         import pyautogui
+
         resolution = getResolutionString(pyautogui.size())
-    
+
     filename = getBTD6InstructionsFileNameByConfig(thisConfig, folder, resolution)
 
     if not exists(folder):
@@ -148,15 +148,13 @@ def writeBTD6InstructionsFile(
     fp.close()
 
 
-def parseBTD6InstructionsFile(
-    filename, targetResolution=None, gamemode=None
-):
+def parseBTD6InstructionsFile(filename, targetResolution=None, gamemode=None):
     """Parse a .btd6 file and return the playthrough config."""
     import pyautogui
-    
+
     if targetResolution is None:
         targetResolution = pyautogui.size()
-    
+
     fileConfig = parseBTD6InstructionFileName(filename)
 
     if not fileConfig:
@@ -184,6 +182,7 @@ def parseBTD6InstructionsFile(
 
     if not targetResolution and fileConfig["resolution"] != getResolutionString():
         from utils.display import customPrint
+
         customPrint(
             "tried parsing playthrough for non native resolution with rescaling disabled!"
         )

@@ -1,4 +1,5 @@
 """Tower-related utilities"""
+
 import numpy as np
 from core.config.loader import towers
 

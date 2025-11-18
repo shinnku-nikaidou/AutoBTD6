@@ -1,4 +1,5 @@
 """Constants and enumerations"""
+
 from enum import Enum
 
 

@@ -1,4 +1,5 @@
 """Medal and game access management"""
+
 import json
 from core.config.loader import userConfig
 from core.constants import sandboxGamemodes

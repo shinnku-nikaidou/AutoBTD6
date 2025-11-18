@@ -1,4 +1,5 @@
 """Configuration loader - loads all JSON files"""
+
 import json
 import pyautogui
 from os.path import exists
@@ -23,18 +24,18 @@ def load_all_configs():
     """Load all configuration files"""
     global maps, gamemodes, keybinds, towers, allImageAreas, imageAreas
     global playthroughStats, userConfig, version
-    
+
     # Load version
     with open("version.txt") as fp:
         version = float(fp.read())
-    
+
     # Load JSON configs
     maps = json.load(open("maps.json"))
     gamemodes = json.load(open("gamemodes.json"))
     keybinds = json.load(open("keybinds.json"))
     towers = json.load(open("towers.json"))
     allImageAreas = json.load(open("image_areas.json"))
-    
+
     # Load resolution-specific image areas
     if getResolutionString() in allImageAreas:
         imageAreas = allImageAreas[getResolutionString()]
@@ -44,11 +45,11 @@ def load_all_configs():
                 json.dumps(allImageAreas["2560x1440"]), (2560, 1440), pyautogui.size()
             )
         )
-    
+
     # Load playthrough stats
     if exists("playthrough_stats.json"):
         playthroughStats = json.load(open("playthrough_stats.json"))
-    
+
     # Load user config with defaults
     userConfig = {
         "monkey_knowledge": {},

@@ -1,4 +1,5 @@
 """Display and logging utilities"""
+
 import time
 
 lastLineRewrite = False

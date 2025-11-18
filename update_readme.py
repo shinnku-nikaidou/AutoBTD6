@@ -32,4 +32,3 @@ else:
     fp = open("README.md", "w")
     fp.write(output)
     fp.close()
-
