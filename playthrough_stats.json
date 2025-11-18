@@ -319,7 +319,7 @@
         }
     },
     "playthroughs/x_factor#hard#2560x1440#noLL.btd6": {
-        "version": 32.0,
+        "version": null,
         "2560x1440": {
             "hard": {
                 "attempts": 1,
@@ -329,16 +329,24 @@
                 ]
             },
             "medium": {
-                "attempts": 1,
-                "wins": 1,
+                "attempts": 2,
+                "wins": 2,
                 "win_times": [
-                    550.9589903354645
+                    550.9589903354645,
+                    942.168523311615
                 ]
             },
             "validation_result": true
         },
         "1920x1080": {
-            "validation_result": true
+            "validation_result": true,
+            "medium": {
+                "attempts": 1,
+                "wins": 1,
+                "win_times": [
+                    806.3849718570709
+                ]
+            }
         }
     },
     "playthroughs/sunken_columns#hard#2560x1440#noMK#noLLwMK.btd6": {
@@ -436,7 +444,7 @@
         }
     },
     "playthroughs/bloody_puddles#hard#2560x1440#noMK#RNG.btd6": {
-        "version": 33.0,
+        "version": null,
         "2560x1440": {
             "hard": {
                 "attempts": 1,
@@ -464,10 +472,11 @@
                 ]
             },
             "hard": {
-                "attempts": 1,
-                "wins": 1,
+                "attempts": 2,
+                "wins": 2,
                 "win_times": [
-                    850.2347509860992
+                    850.2347509860992,
+                    1129.792477607727
                 ]
             },
             "medium": {
@@ -627,9 +636,16 @@
         }
     },
     "playthroughs/kartsndarts#hard#2560x1440#noMK#noLL.btd6": {
-        "version": 32.0,
+        "version": null,
         "2560x1440": {
-            "validation_result": true
+            "validation_result": true,
+            "medium": {
+                "attempts": 1,
+                "wins": 1,
+                "win_times": [
+                    896.9296400547028
+                ]
+            }
         },
         "1920x1080": {
             "validation_result": true
@@ -832,9 +848,16 @@
         }
     },
     "playthroughs/adoras_temple#magic_monkeys_only#2560x1440#noMK#noLLwMK.btd6": {
-        "version": 32.0,
+        "version": null,
         "2560x1440": {
-            "validation_result": true
+            "validation_result": true,
+            "medium": {
+                "attempts": 1,
+                "wins": 1,
+                "win_times": [
+                    1228.4224762916565
+                ]
+            }
         },
         "1920x1080": {
             "validation_result": true
@@ -1020,7 +1043,7 @@
         }
     },
     "playthroughs/workshop#hard#2560x1440.btd6": {
-        "version": 32.0,
+        "version": null,
         "2560x1440": {
             "validation_result": true,
             "hard": {
@@ -1031,10 +1054,11 @@
                 ]
             },
             "medium": {
-                "attempts": 1,
-                "wins": 1,
+                "attempts": 2,
+                "wins": 2,
                 "win_times": [
-                    586.3550131320953
+                    586.3550131320953,
+                    1057.2229046821594
                 ]
             }
         },
@@ -1689,9 +1713,16 @@
             }
         },
         "1920x1080": {
-            "validation_result": true
+            "validation_result": true,
+            "easy": {
+                "attempts": 1,
+                "wins": 1,
+                "win_times": [
+                    537.9992907047272
+                ]
+            }
         },
-        "version": 50.0
+        "version": null
     },
     "playthroughs/dark_path#impoppable#1920x1080.btd6": {
         "2560x1440": {

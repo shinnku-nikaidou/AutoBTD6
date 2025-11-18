@@ -982,6 +982,11 @@ def main():
             customPrint("screen " + screen.name + "!")
 
         if screen == Screen.BTD6_UNFOCUSED:
+            # Wait for window to regain focus before continuing
+            if state == State.INGAME:
+                customPrint("waiting for BTD6 window to regain focus...")
+                time.sleep(1)
+                continue
             pass
         # don't do anything when ctrl is pressed: useful for alt + tab / sending SIGINT(ctrl + c) to the script
         elif keyboard.is_pressed("ctrl"):
@@ -1769,11 +1774,70 @@ def main():
                         thisIterationCost = action["cost"]
                     customPrint("performing action: " + str(action))
                     if action["action"] == "place":
-                        pyautogui.moveTo(action["pos"])
-                        time.sleep(actionDelay)
-                        sendKey(action["key"])
-                        time.sleep(actionDelay)
-                        pyautogui.click()
+                        # Only use retry logic for hero placements
+                        if action["type"] == "hero":
+                            placementSuccess = False
+                            maxRetries = 3
+                            
+                            for attempt in range(maxRetries):
+                                if attempt > 0:
+                                    customPrint(f"retrying hero placement (attempt {attempt + 1}/{maxRetries})...")
+                                    # Click screen to dismiss any popups/hints that might be blocking
+                                    pyautogui.click(100, 100)
+                                    time.sleep(actionDelay)
+                                
+                                # Verify window has focus before placing
+                                activeWindow = ahk.get_active_window()
+                                if not activeWindow or not isBTD6Window(activeWindow.title):
+                                    customPrint("BTD6 window lost focus during placement, waiting...")
+                                    time.sleep(1)
+                                    # Check again after waiting
+                                    activeWindow = ahk.get_active_window()
+                                    if not activeWindow or not isBTD6Window(activeWindow.title):
+                                        customPrint("BTD6 window still not focused, skipping retry...")
+                                        continue
+                                
+                                # Record money before placement
+                                moneyBefore = currentValues["money"]
+                                
+                                # Perform placement
+                                pyautogui.moveTo(action["pos"])
+                                time.sleep(actionDelay)
+                                sendKey(action["key"])
+                                time.sleep(actionDelay)
+                                pyautogui.click()
+                                time.sleep(actionDelay)  # Wait for placement to register
+                                
+                                # Verify placement by checking if money decreased
+                                newScreenshot = np.array(pyautogui.screenshot())[:, :, ::-1].copy()
+                                moneyImage = newScreenshot[
+                                    segmentCoordinates["money"][1] : segmentCoordinates["money"][3],
+                                    segmentCoordinates["money"][0] : segmentCoordinates["money"][2],
+                                ]
+                                try:
+                                    moneyAfter = int(custom_ocr(moneyImage))
+                                    if moneyAfter < moneyBefore or mapConfig["gamemode"] == "deflation":
+                                        customPrint(f"hero placement successful! money: {moneyBefore} -> {moneyAfter}")
+                                        placementSuccess = True
+                                        break
+                                    else:
+                                        customPrint(f"hero placement failed! money unchanged: {moneyBefore}")
+                                except ValueError:
+                                    customPrint("failed to read money after placement, assuming failure")
+                            
+                            if not placementSuccess and maxRetries > 0:
+                                customPrint("hero placement failed after all retries!")
+                                # Put action back so it can be retried in next iteration
+                                mapConfig["steps"].insert(0, action)
+                                thisIterationAction = None
+                                thisIterationCost = 0
+                        else:
+                            # Regular placement for non-hero units
+                            pyautogui.moveTo(action["pos"])
+                            time.sleep(actionDelay)
+                            sendKey(action["key"])
+                            time.sleep(actionDelay)
+                            pyautogui.click()
                     elif (
                         action["action"] == "upgrade"
                         or action["action"] == "retarget"
