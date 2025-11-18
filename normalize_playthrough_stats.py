@@ -1,5 +1,8 @@
-from helper import *
+import json
+import re
 import shutil
+import numpy as np
+from core.config.loader import playthroughStats
 
 for filename in playthroughStats:
     for resolution in playthroughStats[filename]:

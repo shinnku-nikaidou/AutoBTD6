@@ -1,5 +1,9 @@
-from helper import *
 import sys
+import json
+import copy
+from core.config.loader import maps, userConfig
+from core.config.manager import mapsByCategory, mapsByCategoryToMaplist
+from core.game.maps import mapnameToKeyname
 
 if len(sys.argv) < 4 or sys.argv[2] not in ["before", "after"]:
     print(

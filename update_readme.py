@@ -1,4 +1,5 @@
-from helper import *
+import re
+from core.config.loader import maps, version
 
 fp = open("README.md")
 oldREADME = fp.read()

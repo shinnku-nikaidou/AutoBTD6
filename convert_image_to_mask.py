@@ -1,4 +1,7 @@
-from helper import *
+import sys
+import numpy as np
+import cv2
+from os.path import exists
 
 # converts all red pixels to white, all other to black
 

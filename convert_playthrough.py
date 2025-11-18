@@ -1,4 +1,6 @@
-from helper import *
+import sys
+import re
+from core.playthrough.parser import convertBTD6InstructionsFile
 
 if len(sys.argv) < 3 or not re.search(r"\d+x\d+", sys.argv[2]):
     print("Usage: py", sys.argv[0], "<filename> <resolution(e. g. 1920x1080)>")

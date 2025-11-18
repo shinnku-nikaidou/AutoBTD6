@@ -1,4 +1,12 @@
-from helper import *
+import math
+import sys
+import pyautogui
+import keyboard
+from core.config.loader import keybinds
+from core.playthrough.parser import writeBTD6InstructionsFile
+from core.automation.input import ahk
+from core.automation.screen import isBTD6Window
+from utils.file import tupleToStr
 
 monkeysByTypeCount = {"hero": 0}
 

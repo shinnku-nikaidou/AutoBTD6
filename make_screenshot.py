@@ -1,4 +1,9 @@
-from helper import *
+import os
+import time
+from os.path import exists
+import numpy as np
+import cv2
+import pyautogui
 
 if not exists("screenshots"):
     os.mkdir("screenshots")

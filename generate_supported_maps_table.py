@@ -1,5 +1,10 @@
-from helper import *
+import re
 from urllib.parse import quote_plus
+from core.config.loader import maps, gamemodes, playthroughStats
+from core.playthrough.parser import parseBTD6InstructionsFile
+from core.playthrough.manager import getAllAvailablePlaythroughs
+from core.game.towers import getMonkeyUpgradeRequirements, checkForSingleMonkeyType, checkForSingleMonkeyGroup
+from core.playthrough.stats import monkeyUpgradesToString
 
 extraComments = {
     "playthroughs/spice_islands#alternate_bloons_rounds#2560x1440#noMK#noWaterTowers.btd6": [

@@ -1,5 +1,9 @@
-from helper import *
+import sys
+import numpy as np
+import cv2
+from os.path import exists
 from replay import getResolutionDependentData
+from core.automation.screen import recognizeScreen
 
 argv = np.array(sys.argv)
 if len(argv) < 2:

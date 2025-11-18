@@ -9,7 +9,7 @@ Additionally the scripts allow you to record your own playthroughs to a textual 
 
 The scripts have only been tested on Windows.
 
-The config files (list of maps, monkey upgrade costs) are currently set up for **Bloons TD6 v<span id="version">50.0</span>**.
+The config files (list of maps, monkey upgrade costs) are currently set up for **Bloons TD6 v<span id="version">0.5</span>**.
 <br>
 If Ninja Kiwi releases a new major version of Bloons TD6 and the repository is outdated you can easily update it yourself.
 <br>

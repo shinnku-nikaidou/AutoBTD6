@@ -1114,16 +1114,28 @@
     "playthroughs/haunted#magic_monkeys_only#2560x1440#noMK#noLLwMK.btd6": {
         "version": 32.0,
         "2560x1440": {
-            "validation_result": true
+            "validation_result": true,
+            "hard": {
+                "attempts": 0,
+                "wins": 0,
+                "win_times": []
+            }
         },
         "1920x1080": {
             "validation_result": true
         }
     },
     "playthroughs/streambed#magic_monkeys_only#2560x1440#noMK#noLL.btd6": {
-        "version": 32.0,
+        "version": null,
         "2560x1440": {
-            "validation_result": true
+            "validation_result": true,
+            "medium": {
+                "attempts": 1,
+                "wins": 1,
+                "win_times": [
+                    895.2681283950806
+                ]
+            }
         },
         "1920x1080": {
             "validation_result": true
