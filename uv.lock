@@ -28,6 +28,20 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/aa/9f/4455c53091281eb36b70acaca4d6e2944be6624900916b97038f5cff1457/ahk-1.8.4-py3-none-any.whl", hash = "sha256:4f31b77f94a6156302c3d155fad52f010e4e7eeaa7148606d1415a1f98f3a739", size = 124871, upload-time = "2025-04-02T19:46:46.843Z" },
 ]
 
+[package.optional-dependencies]
+binary = [
+    { name = "ahk-binary" },
+]
+
+[[package]]
+name = "ahk-binary"
+version = "2023.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cf/ef/1ef1a9c6dfd7ec2d4347989383f33deaf90d90e4db5859c0ce4a54d7890c/ahk-binary-2023.9.0.tar.gz", hash = "sha256:87ea7fb27e09854fea33b13f0d363a56fb4ae2950bf7b2cca9f64f3d2f685f6d", size = 1260112, upload-time = "2023-09-20T23:34:37.355Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/27/9255a88e9a35e0c6e839e1fda33b4016cdee7f9c5c757f23912d1bf5532f/ahk_binary-2023.9.0-py3-none-any.whl", hash = "sha256:7240821ac64930c8610e7aee04b43ca772bb0e65136f37aab9f54ac1475b8743", size = 1268137, upload-time = "2023-09-20T23:34:35.406Z" },
+]
+
 [[package]]
 name = "astunparse"
 version = "1.6.3"
@@ -46,7 +60,7 @@ name = "autobtd6"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "ahk" },
+    { name = "ahk", extra = ["binary"] },
     { name = "keras" },
     { name = "keyboard" },
     { name = "numpy" },
@@ -63,7 +77,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ahk", specifier = ">=1.8.4" },
+    { name = "ahk", extras = ["binary"], specifier = ">=1.8.4" },
     { name = "keras", specifier = ">=3.12.0" },
     { name = "keyboard", specifier = ">=0.13.5" },
     { name = "numpy", specifier = ">=2.3.5" },
